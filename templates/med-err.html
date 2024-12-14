@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>+ Patients</title>
+    </head>
+    {% extends 'layout-dashboard.html' %}
+    <body>
+      {% block content %}
+        <div class="d-flex" id="wrapper">
+            <!-- Sidebar-->
+            {% include 'sidebar.html' %}
+            <!-- Page content wrapper-->
+            <div id="page-content-wrapper">
+                <!-- Top navigation-->
+                {% include 'topbar.html' %}
+                <!-- Page content-->
+                <div class="container-fluid">
+                    <div class="mt-5 mx-5">
+                    <!-- START: HEADER COLUMN -->
+                      <div class="container">
+                        <div class="row mt-4 align-items-center">
+                            <div class="col-4">
+                                <a class="btn btn-secondary mr-1 rounded-pill px-3" href="/dashboard">BACK</a>
+                            </div>
+                            <div class="col-4">
+                                <div><span class="fs-5 bg-light p-2 px-5 pt-2">Summary of Clinic</span></div>
+                            </div>
+                            <!-- Buttons Column -->
+                            <div class="col-4 text-end">
+                                <!-- <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Sory By
+                                </button>
+                                <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Patient Name</a></li>
+                                <li><a class="dropdown-item" href="#">Clinic Name</a></li>
+                                <li><a class="dropdown-item" href="#">Chief Complaint</a></li>
+                                <li><a class="dropdown-item" href="#">Data Entry By</a></li>
+                                <li><a class="dropdown-item" href="#">Patient Status</a></li>
+                                </ul> -->
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addClinic">Add Clinic</button>
+                            </div>
+                        </div>
+                      </div>
+                    <!--END: HEADER COLUMN -->
+                    </div>
+                    <div class="container">
+                        {% if info %}
+                        <div class="justify-content-center mt-4">
+                            <table class="text-center">
+                                <tr class="bg-primary fw-bold text-light">
+                                  <td>Clinic Name</td>
+                                  <td>Total number of Patients</td>
+                                  <td>Ongoing Cases</td>
+                                  <td>Resolved Cases</td>
+                                  <td>Reviewed Patient Charts as of today</td>
+                                  <td>Clinic Data Source</td>
+                                  <td>Created By</td>
+                                  <td>Date Created</td>
+                                  <td>Date Updated</td>
+                                </tr>
+                                {% for data in info %}
+                                <tr>
+                                    <td>{{data[0]}}</td>
+                                    <td>{{data[1]}}</td>
+                                    <td>{{data[2]}}</td>
+                                    <td>{{data[3]}}</td>
+                                    <td>{{data[4]}}</td>
+                                    <td>{{data[5]}}</td>
+                                    <td>{{data[6]}}</td>
+                                    <td>{{data[7] | epoch_to_gmt8}}</td>
+                                    <td>{{data[8] | epoch_to_gmt8}}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% include 'add-clinic-modal.html' %}
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </body>
+</html>

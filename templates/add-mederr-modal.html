@@ -1,0 +1,162 @@
+<div class="modal fade" id="addMederr" tabindex="-1" aria-labelledby="addClinicLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex justify-content-center w-100">
+                    <h1 class="modal-title fs-5" id="addClinicLabel">Medication Safety Report</h1>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="/dashboard/mederr" method="POST">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <!-- Patient Name Input -->
+                            <div class="mb-3">
+                                <label for="patient-name" class="form-label fw-bold">Patient Name</label>
+                                <input type="text" class="form-control" id="patient-name" name="patient-name" placeholder="Enter patient name" required>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <!-- Clinic Name Input -->
+                            <div class="mb-3">
+                                <label for="clinic-name" class="form-label fw-bold">Clinic name</label>
+                                <select name="clinic-name" id="clinic-name" class="form-select" required>
+                                    <option value="" disabled selected>Select Clinic</option>
+                                    {% for clinic in c_data %}
+                                    <option value="{{clinic[1]}}">{{clinic[1]}} ({{clinic[6]}})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <!-- Medication Error Type Input -->
+                            <div class="mb-3">
+                                <label for="mederr_type" class="form-label fw-bold">Medication Error Type</label>
+                                <select name="mederr_type" id="mederr_type" class="form-select" required>
+                                    <option value="" disabled selected>Medication Error Type</option>
+                                    {% for err_type in err_types %}
+                                    <option value="{{err_type[1]}}">{{err_type[1]}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <!-- Medication Error Type Input -->
+                                <label for="subError" class="form-label fw-bold">Specific Error Type</label>
+                                <select id="subError" name="subError" class="form-control">
+                                    <option value="" disabled selected>Select Specific Error</option>
+                                    <!-- Options will be populated dynamically by JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="medErrorCat" class="form-label fw-bold">Medication Error Category</label>
+                                <select id="medErrorCat" name="medErrorCat" class="form-control">
+                                    <option value="" disabled selected>Select Category</option>
+                                    {% for err_cat in err_cats %}
+                                    <option value="{{err_cat[1]}}">{{err_cat[1]}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="progress" class="form-label fw-bold">Progress</label>
+                                <select id="progress" name="progress" class="form-control">
+                                    <option value="" disabled selected>Select Progress</option>
+                                    <option value="0">Ongoing ⏳</option>
+                                    <option value="1">Resolved ✅</option>
+                                    <option value="2">Unresolved ❌</option>
+                                    <option value="3">For further review 🧐</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="pharmacist-name" class="form-label fw-bold">Pharmacist-in-charge</label>
+                                <input type="text" class="form-control" id="pharmacist-name" name="pharmacist-name" placeholder="Enter pharmacist name (to be in-charge)" required>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="date-occurence" class="form-label fw-bold">Date of Medication Error Occurence</label>
+                                 <div class="input-group">
+                                     <select name="month-occurence" class="form-select" id="month-occurence" onchange="updateDays();">
+                                        <option value="" disabled selected>Month</option>
+                                        <option value="1">Jan</option>
+                                        <option value="2">Feb</option>
+                                        <option value="3">March</option>
+                                        <option value="4">April</option>
+                                        <option value="5">May</option>
+                                        <option value="6">June</option>
+                                        <option value="7">July</option>
+                                        <option value="8">August</option>
+                                        <option value="9">Sept.</option>
+                                        <option value="10">Oct.</option>
+                                        <option value="11">Nov.</option>
+                                        <option value="12">Dec.</option>
+                                    </select>
+
+                                    <select name="day-occurence" class="form-select" id="day-occurence">
+                                        <option value="" disabled selected>Day</option>
+                                    </select>
+
+                                    <select name="year-occurence" class="form-select" id="year-occurence" onchange="updateDays();">
+                                        <option value="" disabled selected>Year</option>
+                                    </select>
+
+                                 </div>
+
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <div class="row">
+                        <!-- Medication Error Type Input -->
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="detailsMedErr" class="form-label fw-bold">Details of Medication Error</label>
+                                <textarea class="form-control" id="detailsMedErr" name="detailsMedErr" placeholder="Please provide details of the medication error." required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="recom" class="form-label fw-bold">Recommendations and Interventions</label>
+                                <textarea class="form-control" id="recom" name="recom" placeholder="Please describe the pharmacist's recommendations and interventions." required></textarea>
+
+                            </div>
+                        </div>
+                        
+                    </div>
+
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

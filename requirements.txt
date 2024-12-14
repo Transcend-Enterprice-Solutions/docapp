@@ -1,0 +1,8 @@
+requests
+qrcode
+flask
+flask-paginate
+plotly-express
+plotly
+pandas
+matplotlib

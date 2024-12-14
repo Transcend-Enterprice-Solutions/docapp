@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Whatsaver - Audit Trail</title>
+</head>
+{% extends 'layout-dashboard.html' %}
+<body>
+    {% block content %}
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar-->
+        {% include 'sidebar.html' %}
+        <!-- Page content wrapper-->
+        <div id="page-content-wrapper">
+            <!-- Top navigation-->
+            {% include 'topbar.html' %}
+            <!-- Page content-->
+            <div class="container-fluid">
+                <div class="mt-5 mx-5">
+                    <!-- HEADER PAGE -->
+                    <div class="container-fluid mx-2 mb-5">
+                        <div class="header-name">
+                            <span class="fs-5 fw-bold">Audit Trail</span>
+                        </div>
+                        <div class="header-desc">
+                            <span class="text-muted">
+                                User activity logs are accessible, with a date range filter limit of one month
+                            </span>
+                        </div>
+                    </div>
+                    <!-- HEADER PAGE -->
+                    {% if audit %}
+                    <div class="px-2 mx-2 my-3">
+                        <span class="text-end text-muted">{{ pagination.info|safe }}</span>
+                    </div>
+                    {% for data in audit %}
+                    <div class="px-2 mx-3 my-3">
+                      <div class="d-flex align-items-center p-3 border rounded bg-light">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <span class="btn btn-{{data[7]}} rounded-circle d-inline-flex justify-content-center align-items-center" style="width: 2.5rem; height: 2.5rem;">
+                            <i class="bi {{data[6]}}" style="font-size: 1.5rem;"></i>
+                          </span>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                          {% if data[3] == 0 %}
+                          {% set acc_type = 'Administrator' %}
+                          {% else %}
+                          {% set acc_type = 'Student' %}
+                          {% endif %}
+                          <strong>{{data[2]}}, {{data[1]}} ({{acc_type}})</strong> 
+                          <span class="text-muted">{{data[5]}}</span>
+                          <div class="text-muted">User Public IP: {{data[4]}}</div>
+                        </div>
+                        <div class="text-muted">
+                          {{data[8] | epoch_to_gmt8}}
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="d-flex justify-content-center align-items-center mx-3 my-3 px-2 p-5" style="border: 1px solid red;">
+                        <span class="fs-4 text-muted">No activities found.</span>
+                    </div>
+                    {% endif %}
+
+
+                    {% if pagination.total_pages > 1 %}
+                    <div class="d-flex justify-content-center align-items-center mx-3 my-3 px-2">
+                        {{ pagination.links }}
+                    </div>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

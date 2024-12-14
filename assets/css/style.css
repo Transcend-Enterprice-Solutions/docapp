@@ -1,0 +1,57 @@
+.-profile {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+.-section {
+    margin: 1rem;
+    padding: 2rem;
+}
+table, th, td {
+  border:  1px solid black;
+  border-collapse: collapse;
+}
+td {
+    padding: 1rem;
+}
+table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width:  100%; /* Adjust the width as needed */
+  margin:  0 auto; /* Center the table */
+}
+
+.card {
+    border-radius: 1rem;
+    color: white;
+    background-color: midnightblue;
+}
+.-section {
+    padding: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* login trails */
+
+.login-card {
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    background-color: #f8f9fa;
+}
+.login-icon {
+    font-size: 2rem;
+    color: #28a745;
+    margin-right: 0.5rem;
+}
+.login-info {
+    flex-grow: 1;
+}
+.login-timestamp {
+    text-align: right;
+    color: #6c757d;
+}

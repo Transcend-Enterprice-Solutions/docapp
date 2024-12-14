@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>+ Patients</title>
+    </head>
+    {% extends 'layout-dashboard.html' %}
+    <body>
+        {% block content %}
+        <style>
+            #-demo-wrapper {
+                margin-bottom: 8rem;
+                margin-top: 2rem;
+            }
+            #-section-wrapper {
+                margin-bottom: 2rem;
+            }
+        </style>
+
+
+        <div class="d-flex" id="wrapper">
+            <!-- Sidebar--> {% include 'sidebar.html' %}
+            <!-- Page content wrapper-->
+            <div id="page-content-wrapper">
+                <!-- Top navigation--> {% include 'topbar.html' %}
+                <!-- Page content-->
+                <div class="container-fluid">
+                    <div class="mx-5">
+                        <form action="/dashboard/add-patient" method="POST">
+                            <div id="-demo-wrapper" class="container">
+                                <div id="-section-wrapper" class="container">
+                                    
+                                    <div class="row">
+                                        <!-- Back Button Column -->
+                                        <div class="col-4 d-flex justify-content-start">
+                                            <a class="btn btn-secondary rounded-pill px-3" href="/dashboard/active-patients">BACK</a>
+                                        </div>
+                                        <!-- Summary of Patients Column -->
+                                        <div class="col-6">
+                                            <div><span class="fs-5 p-2 px-5 pt-2">Summary of Patients</span></div>
+                                        </div>
+                                        <!-- Next Button Column -->
+                                        
+                                    </div>
+
+                                </div>
+                                <div id="-section-wrapper" class="justify-content-center mt-4">
+                                    <div class="container">
+                                        <div class="-header-title mb-5">
+                                            <span class="fs-5 pt-2 fw-bold">Patient Demographics</span>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <div class="mb-3">
+                                                    <label for="name-patient" class="form-label fw-bold">Name of Patient</label>
+                                                    <div class="input-group">
+                                                        <input name="name" type="text" class="form-control" id="name-patient" placeholder="Full Name of Patient">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="mb-3">
+                                                    <label for="age-patient" class="form-label fw-bold">Age</label>
+                                                    
+                                                    <select name="age" class="form-select" id="age-select">
+                                                        <option value="" disabled selected>Select your age</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="mb-3">
+                                                    <label for="gender-patient" class="form-label fw-bold">Gender</label>
+
+                                                    <select name="gender" class="form-select">
+                                                        <option value="M" checked>Male</option>
+                                                        <option value="F">Female</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="mb-3">
+                                                    <label for="date-consult" class="form-label fw-bold">Date of Consultation</label>
+
+                                                     <div class="input-group">
+                                                         <select name="month-consult" class="form-select" id="month-consult" onchange="updateDays();">
+                                                            <option value="" disabled selected>Month</option>
+                                                            <option value="1">Jan</option>
+                                                            <option value="2">Feb</option>
+                                                            <option value="3">March</option>
+                                                            <option value="4">April</option>
+                                                            <option value="5">May</option>
+                                                            <option value="6">June</option>
+                                                            <option value="7">July</option>
+                                                            <option value="8">August</option>
+                                                            <option value="9">Sept.</option>
+                                                            <option value="10">Oct.</option>
+                                                            <option value="11">Nov.</option>
+                                                            <option value="12">Dec.</option>
+                                                        </select>
+
+                                                        <select name="day-consult" class="form-select" id="day-consult">
+                                                            <option value="" disabled selected>Day</option>
+                                                        </select>
+
+                                                        <select name="year-consult" class="form-select" id="year-consult" onchange="updateDays();">
+                                                            <option value="" disabled selected>Year</option>
+                                                        </select>
+
+                                                     </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="mb-3">
+                                                    <label for="weight" class="form-label fw-bold">Weight in Kgs</label>
+                                                    
+                                                    <div class="input-group">
+                                                        <select id="weight-select" name="weight" class="form-select" required>
+                                                            <option value="" disabled selected>Select your weight</option>
+                                                            <!-- Options will be added by JavaScript -->
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="mb-3">
+                                                    <label for="allergy" class="form-label fw-bold">Allergies</label>
+                                                    <div class="input-group">
+                                                        <select name="allergy" class="form-control" id="allergy-select" onchange="toggleAllergyInput()">
+                                                            <option value="No Known">No Known Allergies</option>
+                                                            <option value="Other">Other (Specify below)</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3 d-none" id="allergy-input-group">
+                                                    <input name="allergy-details" type="text" class="form-control" id="allergy" placeholder="Type specific
+                                               allergies here">
+                                                </div>
+                                                <div class="form-text" id="allergy-help">Select 'No Known' if there are no known allergies.</div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="mb-3">
+                                                    <label for="status-patient" class="form-label fw-bold">Patient Status</label>
+                                                    
+                                                    <select name="status-patient" class="form-select">
+                                                        <option value="A" checked>Active</option>
+                                                        <option value="I">Inactive</option>
+                                                        <!-- <option value="S">Suspended</option> -->
+                                                    </select>
+
+                                                </div>
+                                            </div>
+
+                                            {% if c_data %}
+                                            <div class="col-3">
+                                                <div class="mb-3">
+                                                    <label for="clinic-id" class="form-label fw-bold">Clinic Name</label>
+                                                    <select name="clinic-id" id="clinic-id" class="form-select">
+                                                        <option value="" disabled selected>Select Clinic</option>
+                                                        {% for clinic in c_data %}
+                                                        <option value="{{clinic[0]}}">{{clinic[1]}} ({{clinic[6]}})</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+
+                                        </div>
+                                    </div>
+                                    <div id="-section-wrapper" class="container">
+                                        <div class="-header-title mb-5 mt-5">
+                                            <span class="fs-5 pt-2 pb-2 fw-bold">Review of Systems</span>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <div class="mb-3">
+                                                    <label for="temp-patient" class="form-label fw-bold">Temperature in Celsius</label>
+                                                    
+                                                    <select name="temperature" class="form-select">
+                                                        <option value="35.0">35.0°C / 95.0°F</option>
+                                                        <option value="35.5">35.5°C / 95.9°F</option>
+                                                        <option value="36.0">36.0°C / 96.8°F</option>
+                                                        <option value="36.5">36.5°C / 97.7°F</option>
+                                                        <option value="37.0" selected>37.0°C / 98.6°F - Normal</option>
+                                                        <option value="37.5">37.5°C / 99.5°F</option>
+                                                        <option value="38.0">38.0°C / 100.4°F - Fever</option>
+                                                        <option value="38.5">38.5°C / 101.3°F</option>
+                                                        <option value="39.0">39.0°C / 102.2°F</option>
+                                                        <option value="39.5">39.5°C / 103.1°F</option>
+                                                        <option value="40.0">40.0°C / 104.0°F - High Fever</option>
+                                                        <option value="40.5">40.5°C / 104.9°F</option>
+                                                        <option value="41.0">41.0°C / 105.8°F</option>
+                                                        <option value="41.5">41.5°C / 106.7°F</option>
+                                                        <option value="42.0">42.0°C / 107.6°F - Very High Fever</option>
+                                                    </select>
+
+
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="mb-3">
+                                                    <label for="pulse-patient" class="form-label fw-bold">Pulse Rate in BPM</label>
+                                                    <div class="input-group">
+                                                        <select id="pulse-rate-select" class="form-select" name="pulse-rate" required>
+                                                            <option value="" disabled selected>Select BPM</option>
+                                                            <!-- Options will be added by JavaScript -->
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="mb-3">
+                                                    <label for="pressure-patient" class="form-label fw-bold">Blood Pressure in (mmHg)</label>
+                                                    <div class="input-group mb-3">
+                                                        <select id="systolic-select" name="systolicPressure" class="form-select" required>
+                                                            <option value="" disabled selected>Select systolic pressure</option>
+                                                            <!-- Options will be added by JavaScript -->
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="input-group">
+                                                        <select id="diastolic-select" name="diastolicPressure" class="form-select" required>
+                                                            <option value="" disabled selected>Select diastolic pressure</option>
+                                                            <!-- Options will be added by JavaScript -->
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="mb-3">
+                                                    <label for="rp-rate" class="form-label fw-bold">Respiratory Rate</label>
+                                                    <div class="input-group">
+                                                        
+                                                        <select id="respiratory-rate-select" name="respiratoryRate" class="form-select" required>
+                                                            <option value="" disabled selected>Select breaths per minute</option>
+                                                            <!-- Options will be added by JavaScript -->
+                                                        </select>
+
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="container">
+                                        <div class="-header-title mb-5">
+                                        <div class="row">
+                                          <div class="col-6">
+                                            <span class="fs-5 pt-2 pb-2 fw-bold">Patient Medical Information</span>
+                                          </div>
+                                          <!-- <div class="col-6 text-end">
+                                            <button class="btn btn-warning">Edit</button>
+                                            <button class="btn btn-success">Save</button>
+                                            <button class="btn btn-danger">Delete Patient Profile</button>
+                                          </div> -->
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-6">
+                                          <div class="mb-3">
+                                            <label for="patient-complaint" class="form-label fw-bold">Chief Complaint</label>
+                                            <div class="input-group">
+                                              <input name="complaint" type="text" class="form-control" id="patient-complaint" placeholder="Required">
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-6">
+                                          <div class="mb-3">
+                                            <label for="present-history" class="form-label fw-bold">History of Present Illness</label>
+                                            <div class="input-group">
+                                              <input name="present-history" type="text" class="form-control" id="present-history" placeholder="Optional">
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-6">
+                                          <div class="mb-3">
+                                            <label for="soc-history" class="form-label fw-bold">Social History</label>
+                                            <div class="input-group">
+                                              <input name="soc-history" type="text" class="form-control" id="soc-history" placeholder="Optional">
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-6">
+                                          <div class="mb-3">
+                                            <label for="past-history" class="form-label fw-bold">Past History</label>
+                                            <div class="input-group">
+                                              <input name="past-history" type="text" class="form-control" id="past-history" placeholder="Optional">
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-6">
+                                          <div class="mb-3">
+                                            <label for="fam-history" class="form-label fw-bold">Family History</label>
+                                            <div class="input-group">
+                                              <input name="fam-history" type="text" class="form-control" id="fam-history" placeholder="Optional">
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <!-- <div class="col-6">
+                                          <div class="mb-3">
+                                            <label for="med-history" class="form-label fw-bold">Patient Medication History</label>
+                                            <div class="d-flex justify-content-center text-center">
+                                              <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addMed">
+                                                <i class="bi bi-plus-lg me-1 fs-5"></i>
+                                                <span>Add Medication</span>
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div> -->
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                    <div class="container">
+                                        <div class="justify-content-center mt-4 mb-4">
+                                            <div class="-header-title"><span class="fs-5 pt-2 pb-2 fw-bold">Patient Medication History</span></div>
+                                          </div>
+                                        <div class="row align-items-center">
+
+                                            <div class="col-6 mb-3">
+                                                <label for="generic-name" class="form-label fw-bold">Generic Name</label>
+                                                <div class="input-group">
+                                                    <input name="generic-name" type="text" class="form-control" id="generic-name" placeholder="Required">
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-6 mb-3">
+                                                <label for="brand-name" class="form-label fw-bold">Brand Name (if applicable)</label>
+                                                <div class="input-group">
+                                                    <input value="" name="brand-name" type="text" class="form-control" id="brand-name" placeholder="Optional">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-6 mb-3">
+                                                <label for="dos-frm" class="form-label fw-bold">Dosage Form</label>
+                                                
+                                                <div class="input-group">
+                                                    <select id="dosage-form-select" name="dosageForm" class="form-select" onchange="updateStrengthOptions();" required>
+                                                        <option value="" disabled selected>Select dosage form</option>
+                                                        <option value="Tablet">Tablet</option>
+                                                        <option value="Capsule">Capsule</option>
+                                                        <option value="Liquid">Liquid</option>
+                                                        <option value="Injection">Injection</option>
+                                                        <option value="Cream">Cream</option>
+                                                        <option value="Ointment">Ointment</option>
+                                                        <option value="Patch">Patch</option>
+                                                        <option value="Powder">Powder</option>
+                                                        <option value="Gel">Gel</option>
+                                                        <option value="Suppository">Suppository</option>
+                                                        <option value="Spray">Spray</option>
+                                                        <option value="Inhaler">Inhaler</option>
+                                                        <option value="Drops">Drops (eye, ear, or nasal)</option>
+                                                    </select>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-6 mb-3">
+                                                <label for="dos-str" class="form-label fw-bold">Dosage Strength</label>
+                                                <div class="input-group">
+                                                    <input name="dosageStrength" type="text" class="form-control" id="dosageStrength" placeholder="Required">
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-6 mb-3">
+                                                <label for="freq" class="form-label fw-bold">Frequency</label>
+                                                <div class="input-group">
+                                                    <select id="frequency-select" name="frequency" class="form-select" required>
+                                                        <option value="" disabled selected>Select frequency</option>
+                                                        <option value="Once daily">Once Daily</option>
+                                                        <option value="Twice daily">Twice Daily</option>
+                                                        <option value="Three times daily">Three Times Daily</option>
+                                                        <option value="Every four hours">Every Four Hours</option>
+                                                        <option value="As needed">As Needed</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-6 mb-3">
+                                                <label for="indication" class="form-label fw-bold">Indication</label>
+                                                <div class="input-group">
+                                                    <select id="indication-select" name="indication" class="form-select" required>
+                                                        <option value="" disabled selected>Select indication</option>
+                                                        <option value="Hypertension">Hypertension</option>
+                                                        <option value="Diabetes">Diabetes</option>
+                                                        <option value="Pain Relief">Pain Relief</option>
+                                                        <option value="Cholesterol">Cholesterol</option>
+                                                        <option value="Infection">Infection</option>
+                                                        <option value="Vitamins">Vitamins</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div id="-section-wrapper" class="container">
+                                        <div class="text-center mt-3">
+                                            <button type="submit" class="btn btn-primary">SUBMIT</button>
+                                        </div>
+                                    </div>
+                                    <!-- add container here -->
+
+
+                                    <div class="container">
+                                        <div class="text-center justify-content-center">
+                                            <span> {% if response %} {{response}} {% endif %} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function toggleAllergyInput() {
+                var select = document.getElementById('allergy-select');
+                var inputGroup = document.getElementById('allergy-input-group');
+            if (select.value === 'Other') {
+                inputGroup.classList.remove('d-none');
+                } else {
+                    inputGroup.classList.add('d-none');
+                }
+            }
+        </script>
+        <script>
+            const formStrengthMap = {
+                'Tablet': { units: ['mg', 'g'], strengths: [5, 10, 50, 100, 250, 500] },
+                'Capsule': { units: ['mg'], strengths: [10, 20, 50, 100, 200, 300, 400, 500] },
+                'Liquid': { units: ['ml', 'l'], strengths: [5, 10, 30, 50, 100, 250] },
+                'Injection': { units: ['ml'], strengths: [1, 2, 5, 10] },
+                'Cream': { units: ['mg', 'g'], strengths: [10, 20, 50, 100] },
+                'Ointment': { units: ['mg', 'g'], strengths: [10, 20, 50, 100] },
+                'Patch': { units: ['mg'], strengths: [5, 10, 15, 20] },
+                'Powder': { units: ['g'], strengths: [5, 10, 50, 100] },
+                'Gel': { units: ['mg', 'g'], strengths: [10, 30, 50, 100] },
+                'Suppository': { units: ['mg'], strengths: [50, 100, 200] },
+                'Spray': { units: ['ml'], strengths: [10, 20, 30, 50] },
+                'Inhaler': { units: ['mg'], strengths: [10, 20, 40, 100] },
+                'Drops': { units: ['ml'], strengths: [1, 2, 5, 10] }
+            };
+
+            function updateStrengthOptions() {
+                const formSelect = document.getElementById('dosage-form-select');
+                const strengthSelect = document.getElementById('dosage-strength-select');
+                const selectedForm = formSelect.value;
+
+                const options = formStrengthMap[selectedForm];
+                strengthSelect.innerHTML = '';
+                if (options) {
+                    options.strengths.forEach(strength => {
+                        options.units.forEach(unit => {
+                            const option = document.createElement('option');
+                            option.value = `${strength} ${unit}`;
+                            option.textContent = `${strength} ${unit}`;
+                            strengthSelect.appendChild(option);
+                        });
+                    });
+                }
+            }
+        </script>
+        <script>
+            const respiratoryRateSelect = document.getElementById('respiratory-rate-select');
+            for (let i = 8; i <= 30; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i} breaths/min`;
+                respiratoryRateSelect.appendChild(option);
+            }
+
+            document.getElementById('respiratory-rate-form').onsubmit = function(event) {
+                event.preventDefault(); // Prevent the form from submitting traditionally
+                const respiratoryRate = respiratoryRateSelect.value;
+                document.getElementById('output').innerText = `You selected: ${respiratoryRate} breaths/min.`;
+            };
+        </script>
+        <script>
+            const systolicSelect = document.getElementById('systolic-select');
+            const diastolicSelect = document.getElementById('diastolic-select');
+
+            // Populate the dropdown with systolic pressures from 90 to 180 mmHg
+            for (let i = 90; i <= 180; i += 10) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i} mmHg`;
+                systolicSelect.appendChild(option);
+            }
+
+            // Populate the dropdown with diastolic pressures from 60 to 120 mmHg
+            for (let i = 60; i <= 120; i += 10) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i} mmHg`;
+                diastolicSelect.appendChild(option);
+            }
+        </script>
+
+        <script>
+            const select = document.getElementById('pulse-rate-select');
+
+            // Populate the dropdown with pulse rates from 40 BPM to 200 BPM, in 1 BPM increments
+            for (let bpm = 40; bpm <= 200; bpm++) {
+                const option = document.createElement('option');
+                option.value = bpm;
+                option.textContent = `${bpm} BPM`;
+                select.appendChild(option);
+            }
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const select = document.getElementById('weight-select');
+
+                for (let i = 1; i <= 400; i++) {
+                    const kg = i * 0.5;
+                    const option = document.createElement('option');
+                    option.value = kg;
+                    option.textContent = `${kg} kg`;
+                    select.appendChild(option);
+                }
+            });
+        </script>
+        <script>
+            const yearSelect = document.getElementById('year-consult');
+            const currentYear = new Date().getFullYear();
+            
+            // Fill the year dropdown (e.g., from 2020 to 2030)
+            for (let i = currentYear - 10; i <= currentYear + 10; i++) {
+                let option = document.createElement('option');
+                option.value = i;
+                option.text = i;
+                if (i === 2024) {
+                    option.selected = true;
+                }
+                yearSelect.appendChild(option);
+            }
+
+            function updateDays() {
+                const monthSelect = document.getElementById('month-consult');
+                const daySelect = document.getElementById('day-consult');
+                const year = yearSelect.value;
+                const month = monthSelect.value;
+
+                const daysInMonth = new Date(year, month, 0).getDate();
+                
+                // Clear previous entries
+                daySelect.innerHTML = '';
+                // Fill day dropdown based on selected month and year
+                for (let i = 1; i <= daysInMonth; i++) {
+                    let option = document.createElement('option');
+                    option.value = i;
+                    option.text = i;
+                    daySelect.appendChild(option);
+                }
+            }
+        </script>
+        <script>
+            const selectBox = document.getElementById('age-select');
+            for (let i = 1; i <= 100; i++) {
+                let option = document.createElement('option');
+                option.value = i;
+                option.text = i + (i === 1 ? ' year' : ' years');
+                // Set the default checked option to 18
+                if (i === 18) {
+                    option.selected = true;
+                }
+                selectBox.appendChild(option);
+            }
+        </script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+</head>
+{% extends 'layout-dashboard.html' %}
+<body>
+	{% block content %}
+	<div class="container">
+      <div class="-login-wrapper align-items-center position-absolute top-50 start-50 translate-middle">
+      	{% if response %}
+        <div class="alert alert-danger" role="alert">
+          {{response['message']}}
+        </div>
+        {% endif %}
+      	<div class="text-center mb-4">
+      		<img class="img-fluid" width="100" src="{{url_for('static', filename='img/logo.png')}}">
+      	</div>
+      	<form action="/login" method="POST">
+
+      		<div class="input-group input-group-lg mb-3">
+	      		<input name="username" type="text" class="form-control" aria-label="username" placeholder="Username">
+			</div>
+
+			<div class="input-group input-group-lg mb-3">
+				<input name="password" type="password" class="form-control" placeholder="Password" aria-label="Password">
+			</div>
+
+			<div class="d-flex justify-content-center mb-4">
+			  <!-- <a href="/create-account">Create Account</a> -->
+			  <a class="text-decoration-none fw-bold" style="color: black;" href="/help">Need Help?</a>
+			</div>
+			<div class="text-center">
+			  <a type="button" class="btn btn-secondary" href="/">Back</a>
+			  <button id="submit" type="submit" class="btn btn-primary">Login</button>
+			</div>
+      	</form>
+      </div>
+    </div>
+	{% endblock %}
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Index</title>
+  </head>
+  {% extends 'layout.html' %}
+  <body>
+    {% block content %}
+    <div>
+        <div class="text-center position-absolute top-50 start-50 translate-middle">
+          <div class="flex-grow-1 d-flex flex-column">
+            {% if response %}
+            <div class="alert alert-danger" role="alert">
+              {{response['message']}}
+            </div>
+            {% endif %}
+            <!-- <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button> -->
+            <!-- <a class="btn btn-primary mt-auto mb-2" href="/register">Register</a> -->
+            <a class="btn btn-primary mt-auto mb-2" href="/dashboard">Dashboard</a>
+            <!-- <a class="btn btn-warning mt-auto" href="/test-page">Test Page</a> -->
+          </div>
+        </div>
+        {% include 'login-modal.html' %}
+    </div>
+    {% endblock %}
+  </body>
+</html>

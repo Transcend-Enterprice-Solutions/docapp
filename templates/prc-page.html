@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medication Safety Info</title>
+</head>
+{% extends 'layout-dashboard.html' %}
+<body>
+    {% block content %}
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar-->
+        {% include 'sidebar.html' %}
+        <!-- Page content wrapper-->
+        <div id="page-content-wrapper">
+            <!-- Top navigation-->
+            {% include 'topbar.html' %}
+            <!-- Page content-->
+            <!-- start: add prc modal -->
+            {% include 'add-prc-modal.html' %}
+            <!-- end: add prc modal -->
+            <div class="container-fluid">
+                <div class="mt-5 mx-5">
+                    <!-- start: header content -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-4">
+                                <a class="btn btn-secondary rounded-pill px-3" href="/dashboard">Back</a>
+                            </div>
+                            <div class="col-4">
+                                <div class="-header-title text-center">
+                                    <span class="fw-bold fs-4">
+                                        Summary of Users Information
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-4 text-end">
+                                <button class="btn btn-success rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#addprc"><i class="bi bi-plus-lg me-2"></i>Add Practitioner</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    
+
+                    <!-- end: header content -->
+                    
+                    <!-- start: page content -->
+
+                    {% if users %}
+                    <div class="container">
+                        <div class="justify-content-center mt-4">
+                            {% if pagination %}
+                            <div class="px-2 mx-2 my-3">
+                                <span class="text-end text-muted">{{ pagination.info|safe }}</span>
+                            </div>
+                            {% endif %}
+                            <table class="text-center">
+                                <tr class="bg-primary fw-bold text-light">
+                                    <td>Name of Practitioner</td>
+                                    <td>Practitioner Type</td>
+                                    <td>Medical Specialization Type</td>
+                                    <td>Field of Practice</td>
+                                    <td>Account Type</td>
+                                    <td>Action</td>
+                                    <td>Password</td>
+                                </tr>
+                                {% for user in users %}
+                                <tr>
+                                    {% if user[6] %}
+                                    <td>{{user[5]}} {{user[6]}} {{user[7]}}</td>
+                                    {% else %}
+                                    <td>{{user[5]}} {{user[7]}}</td>
+                                    {% endif %}
+                                    <td>{{user[9]}}</td>
+                                    <td>{{user[10]}}</td>
+                                    <td>{{user[11]}}</td>
+                                    <td>
+                                        {% if user[4] == 0 %}
+                                        <span class="fw-bold text-primary">Administrator</span>
+                                        {% else %}
+                                        <span class="fw-bold text-success">Student</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPRC-{{user[0]}}">EDIT</button>
+                                        <a type="button" class="btn btn-danger" href="/dashboard/prcinfo/delete/{{user[0]}}">DELETE</a>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#getPRC-{{user[0]}}">
+                                            <i class="bi bi-qr-code"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% include 'edit-prc-modal.html' %}
+                                {% include 'cred-prc-modal.html' %}
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                    {% if pagination.total_pages > 1 %}
+                    <div class="d-flex justify-content-center align-items-center mx-3 my-3 px-2">
+                        {{ pagination.links }}
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="">
+                        <div class="justify-content-center mt-4">
+                            <div class="text-center">
+                                <span class="fw-bold fs-6 text-danger">No practitioners data found!</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <!-- end: page content -->
+                    <div class="my-2 px-3 mx-3 mt-5">
+                        <div class="container">
+                            {% if data %}
+                            {{data}}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
+</body>
+</html>

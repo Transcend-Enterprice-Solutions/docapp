@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-lg p-2 mt-5 mx-5">
+    <div class="container-fluid">
+      <div class="col-md-3 col-xs-12 p-2">
+        <div class="-profile">
+          {% if session %}
+          <div class="me-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="midnightblue" class="bi bi-person-circle" viewBox="0 0 16 16">
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+            </svg>
+          </div>
+          {% set user = session['user-data'] %}
+          <div class="-profile-name">
+              {% if user[6] %}
+              <span class="fw-bold fs-5">Hello, {{user[5]}} {{user[6]}} {{user[7]}}</span>
+              {% else %}
+              <span class="fw-bold fs-5">Hello, {{user[5]}} {{user[7]}} </span>
+              {% endif %}
+          </div>
+          {% else %}
+          <span class="fw-bold fs-5">You are not logged in. </span>
+          {% endif %}
+          </div>
+      </div>
+      
+      <!--<div class="col-md-3 col-xs-12 p-2">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search" aria-label="Search's username" aria-describedby="basic-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>-->
+
+    </div>
+</nav>

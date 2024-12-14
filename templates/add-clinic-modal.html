@@ -1,0 +1,39 @@
+<div class="modal fade" id="addClinic" tabindex="-1" aria-labelledby="addClinicLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex justify-content-center w-100">
+                    <h1 class="modal-title fs-5" id="addClinicLabel">Add Clinic</h1>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="/dashboard/clinics" method="POST">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <!-- Clinic Name Input -->
+                            <div class="mb-3">
+                                <label for="clinicName" class="form-label">Clinic Name</label>
+                                <input type="text" class="form-control" id="clinicName" name="clinicName" placeholder="Enter clinic name">
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <!-- Clinic Data Source Input -->
+                            <div class="mb-3">
+                                <label for="dataSource" class="form-label">Clinic Data Source</label>
+                                <input type="text" class="form-control" id="dataSource" name="clinicSource" placeholder="Enter data source">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Clinic</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

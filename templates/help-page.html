@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Help</title>
+</head>
+{% extends 'layout-dashboard.html' %}
+<body>
+    <!-- Inside your existing HTML template -->
+    {% block content %}
+    <div class="container my-5 text-center">
+        <div class="help-section">
+            <!-- Start Login Help Content -->
+            <h2>Login Assistance</h2>
+
+            <!-- Use Bootstrap utility classes for styling -->
+            <p class="lead mb-4">Why am I receiving a "Username/Password Mismatch" error?</p>
+            <ul>
+                <li class="text-muted">Double-check that you're entering your email address or username exactly as it was registered.</li>
+                <li class="text-muted">Your password is case-sensitive. Ensure correct capitalization and use the correct format (if applicable).</li>
+                <li class="text-muted">Check if there are any spaces, special characters, or typos in your input.</li>
+            </ul>
+
+            <!-- Continue with more help sections using Bootstrap utility classes -->
+        </div>
+    </div>
+    <div class="container">
+        <div class="col-4">
+            <a class="btn btn-secondary mr-1 rounded-pill px-3" href="/login">BACK</a>
+        </div>
+    </div>
+    {% endblock %}
+
+</body>
+</html>

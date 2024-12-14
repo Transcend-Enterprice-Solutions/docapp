@@ -1,0 +1,138 @@
+<div class="modal fade" id="editPRC-{{user[0]}}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <form action="/dashboard/prcinfo/update" method="POST">
+            <input type="hidden" name="user_id" value="{{user[0]}}">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center">
+                    <div class="w-100 text-center">
+                        <h5 class="modal-title" id="practitionerModalLabel">Edit Practitioner</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container mt-5">
+                        <div class="row justify-content-center">
+                            <div class="col-3">
+                                <label for="fname" class="form-label fw-bold">First Name</label>
+                                <div class="input-group mb-3">
+                                    <input id="fname" class="form-control" placeholder="First Name" type="text" name="fname" value="{{user[5]}}" required>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="mname" class="form-label fw-bold">Middle Name</label>
+                                <div class="input-group mb-3">
+                                    <input id="mname" class="form-control" placeholder="(Optional)" type="text" name="mname" value="{{user[6]}}">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="lname" class="form-label fw-bold">Last Name</label>
+                                <div class="input-group mb-3">
+                                    <input id="lname" class="form-control" placeholder="Last Name" type="text" name="lname" value="{{user[7]}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-3">
+                                <label for="contact-number" class="form-label fw-bold">Contact Number</label>
+                                <div class="input-group mb-3">
+                                    <input id="contact-number" class="form-control" placeholder="eg. 09606563615" type="text" name="contact-number" value="{{user[8]}}" required>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="email" class="form-label fw-bold">Email</label>
+                                <div class="input-group mb-3">
+                                    <input id="email" class="form-control" placeholder="Email" type="email" name="email" value="{{user[1]}}" required>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="role-type" class="form-label fw-bold">Professional Role</label>
+                                <div class="input-group mb-3">
+                                    <!-- Set the value to `user[12]` if it's defined, else set a default option -->
+                                    <select class="form-control" name="role-type" required id="professional-role-select">
+                                        {% if user and user[9] %}
+                                            <option value="{{user[9]}}" selected disabled>{{user[9]}}</option>
+                                            <!-- Assuming roles is defined here -->
+                                            {% if roles %} 
+                                                {% for role in roles %}
+                                                    <option value="{{role[2]}}">{{role[1]}} ({{role[2]}})</option>    
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% else %}
+                                            <!-- Handle the case where `roles` variable is not set -->
+                                            <option value="">No professional roles available</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-3">
+                                <label for="med-type" class="form-label fw-bold">Specialization Type</label>
+                                <div class="input-group mb-3">
+                                    <select class="form-control" name="med-type" required id="medical-specializations-select">
+                                        {% if user and user[10] %}
+                                            <option value="{{user[10]}}" selected disabled>{{user[10]}}</option>
+                                            <!-- Assuming meds is defined here -->
+                                            {% if meds %} 
+                                                {% for med in meds %}
+                                                    <option value="{{med[1]}}">{{med[1]}}</option>    
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% else %}
+                                            <!-- Handle the case where `fops` variable is not set -->
+                                            <option value="">No medical specializations available</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-3">
+                                <label for="acc-type" class="form-label fw-bold">Account Type</label>
+                                <div class="input-group mb-3">
+                                    <select class="form-control" name="acc-type" required id="acc-type">
+                                        <option value="{{user[4]}}" selected disabled>
+                                            {% if user[4] == 0 %}
+                                            Administrator
+                                            {% else %}
+                                            Student
+                                            {% endif %}
+                                        </option>
+                                        <option value="0">Administrator</option>
+                                        <option value="1">Student</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            
+                            <div class="col-3">
+                                <label for="fop" class="form-label fw-bold">Field of Practice</label>
+                                <div class="input-group mb-3">
+                                    <!-- Set the value to `user[11]` if it's defined, else set a default option -->
+                                    <select class="form-control" name="fop" required id="field-of-practice-select">
+                                        {% if user and user[11] %}
+                                            <option value="{{user[11]}}" selected disabled>{{user[11]}}</option>
+                                            {% if fop %}
+                                                {% for fp in fop %}
+                                                    <option value="{{fp[1]}}">{{fp[1]}}</option>    
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% else %}
+                                            <!-- Handle the case where `fops` variable is not set -->
+                                            <option value="">No fields of practice available</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

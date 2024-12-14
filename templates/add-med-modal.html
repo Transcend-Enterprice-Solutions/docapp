@@ -1,0 +1,138 @@
+<style>
+  #medInput {
+    margin-bottom: 1.5rem;
+  }
+</style>
+<div class="modal fade" id="addMed" tabindex="-1" aria- aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form action="/dashboard/pmedhistory/{{patient_infos[0]}}" method="POST">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title fs-5">{{patient_infos[2]}}</span>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-start">
+          <div class="container">
+            <div class="row align-items-center">
+              <input type="hidden" name="patient-id" value="{{patient_infos[0]}}">
+              <div id="medInput" class="col-6">
+                <label for="generic-name" class="form-label fw-bold">Generic Name</label>
+                <div class="input-group">
+                  <input name="generic-name" type="text" class="form-control bg-light" id="generic-name" placeholder="Required">
+                </div>
+              </div>
+              <div id="medInput" class="col-6">
+                <label for="brand-name" class="form-label fw-bold">Brand Name (if applicable)</label>
+                <div class="input-group">
+                  <input value="" name="brand-name" type="text" class="form-control bg-light" id="brand-name" placeholder="Optional">
+                </div>
+              </div>
+
+              <div id="medInput" class="col-6">
+                <label for="dos-frm" class="form-label fw-bold">Dosage Form</label>
+                <div class="input-group">
+                  <select id="dosage-form-select" name="dosageForm" class="form-select" onchange="updateStrengthOptions();" required>
+                      <option value="" disabled selected>Select dosage form</option>
+                      <option value="Tablet">Tablet</option>
+                      <option value="Capsule">Capsule</option>
+                      <option value="Liquid">Liquid</option>
+                      <option value="Injection">Injection</option>
+                      <option value="Cream">Cream</option>
+                      <option value="Ointment">Ointment</option>
+                      <option value="Patch">Patch</option>
+                      <option value="Powder">Powder</option>
+                      <option value="Gel">Gel</option>
+                      <option value="Suppository">Suppository</option>
+                      <option value="Spray">Spray</option>
+                      <option value="Inhaler">Inhaler</option>
+                      <option value="Drops">Drops (eye, ear, or nasal)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div id="medInput" class="col-6">
+                <label for="dos-str" class="form-label fw-bold">Dosage Strength</label>
+                <div class="input-group">
+                  <select id="dosage-strength-select" name="dosageStrength" class="form-select" required>
+                      <option value="" disabled selected>Select strength</option>
+                      <!-- Options will be added by JavaScript -->
+                  </select>
+                </div>
+              </div>
+              
+              <div id="medInput" class="col-6">
+                <label for="freq" class="form-label fw-bold">Frequency</label>
+                <div class="input-group">
+                    <select id="frequency-select" name="frequency" class="form-select" required>
+                        <option value="" disabled selected>Select frequency</option>
+                        <option value="Once daily">Once Daily</option>
+                        <option value="Twice daily">Twice Daily</option>
+                        <option value="Three times daily">Three Times Daily</option>
+                        <option value="Every four hours">Every Four Hours</option>
+                        <option value="As needed">As Needed</option>
+                    </select>
+                </div>
+              </div>
+              <div id="medInput" class="col-6">
+                <label for="indication" class="form-label fw-bold">Indication</label>
+                <div class="input-group">
+                  <div class="input-group">
+                      <select id="indication-select" name="indication" class="form-select" required>
+                          <option value="" disabled selected>Select indication</option>
+                          <option value="Hypertension">Hypertension</option>
+                          <option value="Diabetes">Diabetes</option>
+                          <option value="Pain Relief">Pain Relief</option>
+                          <option value="Cholesterol">Cholesterol</option>
+                          <option value="Infection">Infection</option>
+                          <option value="Vitamins">Vitamins</option>
+                      </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  const formStrengthMap = {
+      'Tablet': { units: ['mg', 'g'], strengths: [5, 10, 50, 100, 250, 500] },
+      'Capsule': { units: ['mg'], strengths: [10, 20, 50, 100, 200] },
+      'Liquid': { units: ['ml', 'l'], strengths: [5, 10, 30, 50, 100, 250] },
+      'Injection': { units: ['ml'], strengths: [1, 2, 5, 10] },
+      'Cream': { units: ['mg', 'g'], strengths: [10, 20, 50, 100] },
+      'Ointment': { units: ['mg', 'g'], strengths: [10, 20, 50, 100] },
+      'Patch': { units: ['mg'], strengths: [5, 10, 15, 20] },
+      'Powder': { units: ['g'], strengths: [5, 10, 50, 100] },
+      'Gel': { units: ['mg', 'g'], strengths: [10, 30, 50, 100] },
+      'Suppository': { units: ['mg'], strengths: [50, 100, 200] },
+      'Spray': { units: ['ml'], strengths: [10, 20, 30, 50] },
+      'Inhaler': { units: ['mg'], strengths: [10, 20, 40, 100] },
+      'Drops': { units: ['ml'], strengths: [1, 2, 5, 10] }
+  };
+
+  function updateStrengthOptions() {
+      const formSelect = document.getElementById('dosage-form-select');
+      const strengthSelect = document.getElementById('dosage-strength-select');
+      const selectedForm = formSelect.value;
+
+      const options = formStrengthMap[selectedForm];
+      strengthSelect.innerHTML = ''; // Clear previous options
+      if (options) {
+          options.strengths.forEach(strength => {
+              options.units.forEach(unit => {
+                  const option = document.createElement('option');
+                  option.value = `${strength} ${unit}`;
+                  option.textContent = `${strength} ${unit}`;
+                  strengthSelect.appendChild(option);
+              });
+          });
+      }
+  }
+</script>

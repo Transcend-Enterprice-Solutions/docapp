@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Medication Error</title>
+    </head>
+    {% extends 'layout-dashboard.html' %}
+    <body>
+      {% block content %}
+        <div class="d-flex" id="wrapper">
+            <!-- Sidebar-->
+            {% include 'sidebar.html' %}
+            <!-- Page content wrapper-->
+            <div id="page-content-wrapper">
+                <!-- Top navigation-->
+                {% include 'topbar.html' %}
+                <!-- Page content-->
+                <div class="container-fluid">
+                    <div class="mt-5 mx-5">
+                    <!-- START: HEADER COLUMN -->
+                      <div class="container">
+                        <div class="row mt-4 align-items-center">
+                            <div class="col-4">
+                                <a class="btn btn-secondary mr-1 rounded-pill px-3" href="/dashboard">BACK</a>
+                            </div>
+                            <div class="col-4">
+                                <div><span class="fs-5 bg-light p-2 px-5 pt-2">Medication Safety Report</span></div>
+                            </div>
+                            <!-- Buttons Column -->
+                            <div class="col-4 text-end">
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addMederr">Add Patient</button>
+                            </div>
+                        </div>
+                      </div>
+                    <!--END: HEADER COLUMN -->
+                    </div>
+                    <div class="container text-end mt-4 mb-5 pb-5">
+                        {{ pagination.info|safe }}
+                        <div class="justify-content-center mt-4">
+                            <table class="text-center">
+                                <tr class="bg-primary fw-bold text-light">
+                                  <td>Date of Medication Error Occurence</td>
+                                  <td>Patient Name</td>
+                                  <td>Clinic Name</td>
+                                  <td>Type of Medication Error</td>
+                                  <td>Error Committed By</td>
+                                  <td>Specific Type of Medication Error</td>
+                                  <td>Details of Medication Error</td>
+                                  <td>NCCMERP Medication Error Categories</td>
+                                  <td>Recommendation and Internvention's Progress</td>
+                                  <td>Pharmacist-in-charge</td>
+                                  <td>Action</td>
+                                </tr>
+                                {% if med_safety %}
+                                {% for med in med_safety %}
+                                <tr>
+                                    <td>{{med[10] | occur_format}}</td>
+                                    <td>{{med[1]}}</td>
+                                    <td>{{med[2]}}</td>
+                                    <td>{{med[3]}}</td>
+                                    <td>{{med[11]}}</td>
+                                    <td>{{med[4]}}</td>
+                                    <td>{{med[6]}}</td>
+                                    <td>{{med[5]}}</td>
+                                    <td>
+                                        {% if med[8] == 0 %}
+                                            Ongoing ⏳
+                                        {% elif med[8] == 1 %}
+                                            Resolved ✅
+                                        {% elif med[8] == 2 %}
+                                            Unresolved ❌
+                                        {% elif med[8] == 3 %}
+                                            For Further Review 🔄
+                                        {% endif %}
+                                    </td>
+                                    <td>{{med[9]}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#actionBtn-{{med[0]}}">
+                                        GET
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% include 'action-mederr-modal.html' %}
+                                {% endfor %}
+                                {% endif %}
+                            </table>
+                        </div>
+                        {% if pagination.total_pages > 1 %}
+                        <div class="d-flex justify-content-center align-items-center mx-3 my-3 px-2">
+                            {{ pagination.links }}
+                        </div>
+
+                        {% endif %}
+                    </div>
+                    {% include 'add-mederr-modal.html' %}
+                </div>
+            </div>
+        </div>
+        <script>
+        // JavaScript code goes here
+        // First selection menu
+        const errorTypeSelect = document.getElementById('mederr_type');
+        const subErrorSelect = document.getElementById('subError');
+
+        // Options for the first selection menu
+        const errorTypes = {
+          'Prescription Error - Erronous': [
+            'Brand name precedes Generic name',
+            'Generic name inside the parenthesis',
+            'Brand name not in parenthesis'
+            ],
+          'Prescription Error - Violative ': [
+            'No Generic name',
+            'Brand name indicated with instructions',
+            'Illegible generic name',
+            'Illegible dosage strength',
+            'No frequency',
+            'No dosage strength',
+            'Wrong dosage strength',
+            'Wrong dosage form',
+            'Physician\'s use of abbreviations',
+            'Generic name illegibly written, brand name legibly written',
+            'Superimposition',
+            'No dosage form',
+            'No route of administration',
+            'Wrong frequency'
+            ],
+          'Prescription Error - Impossible': [
+            'Generic name does not correspond to the brand name',
+            'Illegible handwriting of physician',
+            'No drug indicated',
+            'Incomplete generic name',
+            'Wrong brand name',
+            'Wrong route of administration',
+            'Wrong generic name'
+            ],
+          'Dispensing Error': [
+            'Wrong dose of medication was dispensed.',
+            'Wrong dosage form was dispensed.',
+            'Wrong medication was dispensed.',
+            'Wrong request of the medication in unit dose.',
+            'Dispensed item was not properly labeled.',
+            'Dispensed open medication.',
+            'Dispensed expired medication.'
+          ],
+          'Omission Error': [
+            'Patient refuses to take the medication',
+            'Patient missed the dose administration'
+          ],
+          'Administration Error': [
+            'Delayed administration of the medication',
+            'Wrong drug given',
+            'Underdose administration',
+            'Patient\'s caregiver forgot to give the medication.',
+            'Overdose administration',
+            'Wrong time of administration',
+            'Wrong route of administration',
+            'Discontinued medication was given',
+            'Wrong dosage form given',
+            'Wrong medication was given to the patient'
+          ],
+          'Compliance Error': [
+            'Patient does not take the medication on time',
+            'Patient does not take the medication due to financial constraints',
+            'Patient does not know how to take the medication due lack of knowledge of it.'
+          ],
+          'Monitoring Error': [
+            'Failing to take into account the patient\'s liver and renal function',
+            'Failing to document allergy or potential for drug interaction'
+          ],
+          'Others': [
+            'Not applicable (Proceed to writing the complete details of medication error)'
+          ]
+        };
+
+        // Function to populate the second selection menu based on the first selection
+        function populateSubErrorOptions() {
+          const selectedErrorType = errorTypeSelect.value;
+          const subErrors = errorTypes[selectedErrorType];
+          subErrorSelect.innerHTML = '';
+
+          if (Array.isArray(subErrors)) {
+            subErrors.forEach(subError => {
+              const option = document.createElement('option');
+              option.textContent = subError;
+              subErrorSelect.appendChild(option);
+            });
+          } else {
+            Object.keys(subErrors).forEach(subError => {
+              const option = document.createElement('option');
+              option.textContent = subError;
+              subErrorSelect.appendChild(option);
+            });
+          }
+        }
+
+        // Populate the second selection menu when the first one changes
+        errorTypeSelect.addEventListener('change', populateSubErrorOptions);
+
+        // Initial population of the second selection menu
+        populateSubErrorOptions();
+      </script>
+      <script>
+            const yearSelect = document.getElementById('year-occurence');
+            const currentYear = new Date().getFullYear();
+            
+            // Fill the year dropdown (e.g., from 2020 to 2030)
+            for (let i = currentYear - 10; i <= currentYear + 10; i++) {
+                let option = document.createElement('option');
+                option.value = i;
+                option.text = i;
+                if (i === 2024) {
+                    option.selected = true;
+                }
+                yearSelect.appendChild(option);
+            }
+
+            function updateDays() {
+                const monthSelect = document.getElementById('month-occurence');
+                const daySelect = document.getElementById('day-occurence');
+                const year = yearSelect.value;
+                const month = monthSelect.value;
+
+                const daysInMonth = new Date(year, month, 0).getDate();
+                
+                // Clear previous entries
+                daySelect.innerHTML = '';
+                // Fill day dropdown based on selected month and year
+                for (let i = 1; i <= daysInMonth; i++) {
+                    let option = document.createElement('option');
+                    option.value = i;
+                    option.text = i;
+                    daySelect.appendChild(option);
+                }
+            }
+        </script>
+        {% endblock %}
+
+    </body>
+</html>

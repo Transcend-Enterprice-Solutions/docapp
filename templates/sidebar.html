@@ -1,0 +1,37 @@
+<div class="border-end" id="sidebar-wrapper">
+    <div class="sidebar-heading text-center">
+        <img class="img-fluid" width="80" src="{{url_for('static', filename='img/logo.png')}}">
+    </div>
+    <div class="list-group list-group-flush text-center">
+        {% if session %}
+        {% set user = session['user-data'] %}
+        {% endif %}
+        
+        {% if user[4] == 1 %}
+        <!-- START: STUDENT VIEW -->
+        <!-- 
+        (2, 'raffy@gmail.com', 'caredental7580', 'ZFnn8Ba&ma', 1, 'Raffy', '', 'Neones', '09583257832', 'RN', 'Pediatrics', 'Medicine', 'John T., RPh', '1714477975', '1714477975') -->
+        <!-- END: STUDENT VIEW -->
+        {% else %}
+        <!-- START: PRACTITIONER/ADMIN VIEW -->
+        {% endif %}
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/dashboard"><i class="bi bi-house-door fs-1"></i></a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/dashboard/add-patient"><i class="bi bi-person-plus fs-1"></i></a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/dashboard/active-patients"><i class="bi bi-person-rolodex fs-1"></i></a>
+        <!--<a class="list-group-item list-group-item-action list-group-item-light p-3" href="/dashboard/pmedhistory"><i class="bi bi-person-vcard fs-1"></i></a>-->
+        <!-- start: medication safety information -->
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/dashboard/msinfo"><i class="bi bi-person-vcard fs-1"></i></a>
+        <!-- end: medication safety information -->
+        <!-- <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!"><i class="bi bi-command fs-1"></i></a>-->
+        {% if user[4] == 0 %}
+        <!-- start: practitioners -->
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/dashboard/prcinfo"><i class="bi bi-person-badge fs-1"></i></a>
+        <!-- end: practitioners -->
+
+        <!-- start: audit -->
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/dashboard/audit"><i class="bi bi-clipboard fs-1"></i></a>
+        <!-- end: audit -->
+        {% endif %}
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/logout"><i class="bi bi-box-arrow-right fs-1"></i></a>
+    </div>
+</div>

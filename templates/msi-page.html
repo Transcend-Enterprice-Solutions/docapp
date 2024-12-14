@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medication Safety Info</title>
+</head>
+{% extends 'layout-dashboard.html' %}
+<body>
+    {% block content %}
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar-->
+        {% include 'sidebar.html' %}
+        <!-- Page content wrapper-->
+        <div id="page-content-wrapper">
+            <!-- Top navigation-->
+            {% include 'topbar.html' %}
+            <!-- Page content-->
+            <div class="container-fluid">
+                <div class="mt-3 mx-5">
+                    
+                    <div class="-header-title text-center">
+                        <span class="fw-bold fs-4">
+                            Summary of Medication Safety Information
+                        </span>
+                    </div>
+                    {% if med_safety %}
+                    <div class="container mb-5">
+                        {% if pagination %}
+                        <div class="text-end">
+                        {{pagination.info | safe}}
+                        </div>
+                        <div class="justify-content-center mt-4">
+                            <table class="text-center">
+                                <tr class="bg-primary fw-bold text-light">
+                                    <td>Date of Medication Error Occurence</td>
+                                    <td>Patient Name</td>
+                                    <td>Clinic</td>
+                                    <td>Type of Medication Error</td>
+                                    <td>NCCMERP Medication Error Categories</td>
+                                    <td>Type of Pharmacist's Recommendations and Interventions</td>
+                                    <td>Pharmacist-in-charge</td>
+                                </tr>
+                                {% for med in med_safety %}
+                                <tr>
+                                    <td>{{med[10] | occur_format}}</td>
+                                    <td>{{med[1]}}</td>
+                                    <td>{{med[2]}}</td>
+                                    <td>{{med[3]}}</td>
+                                    <td>{{med[5]}}</td>
+                                    <td>{{med[7]}}</td>
+                                    <td>{{med[9]}}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        {% if pagination.total_pages > 1 %}
+                        <div class="d-flex justify-content-center align-items-center mx-3 my-3 px-2">
+                            {{ pagination.links }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    {% endif %}
+                    {% else %}
+                    <div class="">
+                        <div class="justify-content-center mt-4">
+                            <div class="text-center">
+                                <span class="fw-bold fs-6 text-primary">No results!</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

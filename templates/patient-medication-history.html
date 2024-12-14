@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Medication History</title>
+</head>
+{% extends 'layout-dashboard.html' %}
+<body>
+    {% block content %}
+
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar-->
+        {% include 'sidebar.html' %}
+        <!-- Page content wrapper-->
+        <div id="page-content-wrapper">
+            <!-- Top navigation-->
+            {% include 'topbar.html' %}
+            <!-- Page content-->
+            <div class="container">
+                <!-- <div class="row">
+                    <div class="col-md-3">
+                        <a class="btn btn-secondary mr-1 rounded-pill px-3">BACK</a>
+                    </div>
+                </div> -->
+                {% if patient_meds %}
+
+
+                <div class="mx-2 mt-5">
+                    <a href="/dashboard/active-patients" class="btn btn-secondary mr-1 rounded-pill px-3">BACK</a>
+                </div>
+                <div class="text-center">
+                    <span class="fw-bold fs-5">Summary of Patient Medication History</span>
+                </div>
+
+                <div class="p-3">
+                    <div class="row">
+                        
+
+                        <div class="text-end dropdown-center">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Sory By
+                            </button>
+                            <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Generic Name</a></li>
+                            <li><a class="dropdown-item" href="#">Brand Name</a></li>
+                            <li><a class="dropdown-item" href="#">Dosage Strength</a></li>
+                            <li><a class="dropdown-item" href="#">Dosage Form</a></li>
+                            <li><a class="dropdown-item" href="#">Frequency</a></li>
+                            <li><a class="dropdown-item" href="#">Indication</a></li>
+                            </ul>
+
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMed">Add Medication</button>
+                            {% include 'add-med-modal.html' %}
+                        </div>
+                    </div>
+                    
+                    <div class="patient-name"><span class="fw-bold fs-4">{{patient_infos[2]}}</span></div>
+                </div>
+
+                <div class="px-3 pb-2">
+                  <div class="justify-content-center mt-2">
+                    <table class="text-center" id="patientMed">
+                      <tr class="bg-primary fw-bold text-light">
+                        <td>Generic Name</td>
+                        <td>Brand Name</td>
+                        <td>Dosage Strength</td>
+                        <td>Dosage Form</td>
+                        <td>Frequency</td>
+                        <td>Indication</td>
+                        <td>Action</td>
+                      </tr>
+                      {% for patient_med in patient_meds %}
+                      <tr>
+                        <td>{{patient_med[2]}}</td>
+                        <td>{{patient_med[3]}}</td>
+                        <td>{{patient_med[4]}}</td>
+                        <td>{{patient_med[5]}}</td>
+                        <td>{{patient_med[6]}}</td>
+                        <td>{{patient_med[7]}}</td>
+                        <td>
+                            <form action="/dashboard/pmedhistory/delete" method="POST">
+                                <input type="hidden" name="patient-id" value="{{patient_infos[0]}}">
+                                <input type="hidden" name="med-id" value="{{patient_med[0]}}">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </table>
+                  </div>
+                </div>
+                {% else %}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="patient-name"><span class="fw-bold fs-4">{{patient_infos[1]}}</span></div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-end">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMed">Add Medication</button>
+                                {% include 'add-med-modal.html' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="text-center mt-5 mb-5 mx-3">
+                        <div class="justify-content-center">
+                            <span class="fw-bold fs-4">
+                                No medications history
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

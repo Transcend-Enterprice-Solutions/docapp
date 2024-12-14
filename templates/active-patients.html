@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>+ Patients</title>
+    </head>
+    {% extends 'layout-dashboard.html' %}
+    <body>
+      {% block content %}
+        <div class="d-flex" id="wrapper">
+            <!-- Sidebar-->
+            {% include 'sidebar.html' %}
+            <!-- Page content wrapper-->
+            <div id="page-content-wrapper">
+                <!-- Top navigation-->
+                {% include 'topbar.html' %}
+                <!-- Page content-->
+                <div id="-main-section" class="container-fluid">
+                    <div class="mt-5 mx-5">
+                      <div class="container">
+                        <div class="row mt-4 align-items-center">
+                            <!-- Header Column -->
+
+                            <div class="col-4">
+                                <a class="btn btn-secondary mr-1 rounded-pill px-3" href="/dashboard">BACK</a>
+                            </div>
+                            <div class="col-4">
+                                <div><span class="fs-5 bg-light p-2 px-5 pt-2">Summary of Patients</span></div>
+                            </div>
+                            <!-- Buttons Column -->
+                            <div class="col-4 text-end">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Sory By
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" onclick="sortTable(0)">Patient Name</a></li>
+                                    <li><a class="dropdown-item" onclick="sortTable(1)">Clinic Name</a></li>
+                                    <li><a class="dropdown-item" onclick="sortTable(2)">Chief Complaint</a></li>
+                                    <li><a class="dropdown-item" onclick="sortTable(3)">Data Entry By</a></li>
+                                    <li><a class="dropdown-item" onclick="sortTable(4)">Patient Status</a></li>
+                                </ul>
+                                <a href="/dashboard/add-patient" type="button" class="btn btn-success mr-1 rounded-pill px-3"><i class="bi bi-plus-lg me-2"></i>Add Patient</a>
+                                <!-- <button type="button" class="btn btn-warning mr-1 rounded-pill px-3">Edit Patient</button> -->
+                                <!-- <button type="button" class="btn btn-danger">Button  4</button>-->
+                            </div>
+                        </div>
+                      </div>
+                      <div class="container">
+                          <div class="justify-content-center mt-4">
+                            <table class="text-center" id="patientTable">
+                                <tr class="bg-primary fw-bold text-light">
+                                  <!--<td>Patient ID</td> -->
+                                  <td>Patient Name</td>
+                                  <td>Clinic</td>
+                                  <td>Chief Complaint</td>
+                                  <td>Data Entry By</td>
+                                  <td>Patient Status</td>
+                                  <td>Medication</td>
+                                  <td>Action</td>
+                                </tr>
+                                {% for patient in response['patient-demo'] %}
+                                <tr>
+                                  <td>{{patient[2]}}</td>
+                                  <td>{{patient[-1]}}</td>
+                                  <td>{{patient[14]}}</td>
+                                  <td>{{patient[19]}}</td>
+                                  <td>
+                                      {% if patient[8] == 'A' %}
+                                      <span class="text-primary fw-bold">Active</span>
+                                      {% elif patient[8] == 'I' %}
+                                      <span class="text-danger fw-bold">Inactive</span>
+                                      {% elif patient[8] == 'R' %}
+                                      <span class="text-success fw-bold">Resolved</span>
+                                      {% else %}
+                                      <!-- <span class="text-danger fw-bold">Suspended</span> -->
+                                      {% endif %}
+                                  </td>
+                                  <td>
+                                      <a href="/dashboard/pmedhistory/{{patient[0]}}" class="btn btn-primary">GET</a>
+                                  </td>
+                                  <td>
+                                    {% if patient[8] == 'R' %}
+                                    <form action="/dashboard/active-patients" method="POST">
+                                        <input type="hidden" name="patient-id" value="{{patient[0]}}">
+                                        <input type="hidden" name="status" value="A">
+                                        <button type="submit" class="btn btn-success">Active</button>
+                                    </form>
+                                    {% elif patient[8] == 'S' %}
+                                    <form action="/dashboard/active-patients" method="POST">
+                                        <input type="hidden" name="patient-id" value="{{patient[0]}}">
+                                        <input type="hidden" name="status" value="A">
+                                        <button type="submit" class="btn btn-success">Active</button>
+                                    </form>
+                                    {% else %}
+                                    <form action="/dashboard/active-patients" method="POST">
+                                          <input type="hidden" name="patient-id" value="{{patient[0]}}">
+                                          <div class="mb-1">
+                                              {% if patient[8] == 'A' %}
+                                              <input type="hidden" name="status" value="I">
+                                              {% set status_name = 'Inactive' %}
+                                              {% elif patient[8] == 'I' %}
+                                              <input type="hidden" name="status" value="A">
+                                              {% set status_name = 'Active' %}
+                                              {% else %}
+                                              <input type="hidden" name="status" value="A">
+                                              {% set status_name = 'Active' %}
+                                              {% endif %}
+                                              {% if status_name == 'Inactive' %}
+                                              <button type="submit" class="btn btn-danger">{{status_name}}</button>
+                                              {% else %}
+                                              <button type="submit" class="btn btn-primary">{{status_name}}</button>
+                                              {% endif %}
+                                          </div>
+                                      </form>
+                                      <!-- <form action="/dashboard/active-patients" method="POST">
+                                          <div class="mb-1">
+                                              <input type="hidden" name="patient-id" value="{{patient[0]}}">
+                                              <input type="hidden" name="status" value="S">
+                                              <button type="submit" class="btn btn-danger">Suspend</button>
+                                          </div>
+                                      </form> -->
+                                      <form action="/dashboard/active-patients" method="POST">
+                                          <div class="mb-1">
+                                              <input type="hidden" name="patient-id" value="{{patient[0]}}">
+                                              <input type="hidden" name="status" value="R">
+                                              <button type="submit" class="btn btn-success">Resolve</button>
+                                          </div>
+                                      </form>
+                                    {% endif %}
+                                  </td>
+                                </tr>
+                                {% endfor %}
+                              </table>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </body>
+</html>
